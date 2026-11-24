@@ -2,5 +2,18 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended"
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "prek hook pins. Renovate's pre-commit manager is disabled by default and only matches .pre-commit-config.ya?ml, so prek.toml needs its own manager or the revs never move.",
+      "managerFilePatterns": [
+        "/^prek\\.toml$/"
+      ],
+      "matchStrings": [
+        "repo = \"https://github\\.com/(?<depName>[^\"]+)\"\\nrev = \"(?<currentValue>[^\"]+)\""
+      ],
+      "datasourceTemplate": "github-tags"
+    }
   ]
 }

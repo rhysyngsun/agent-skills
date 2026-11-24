@@ -49,6 +49,8 @@ nothing.
 
 ## Consumption
 
-A NixOS/home-manager flake pins this repository with nvfetcher and discovers
-`skills/` and `rules/` by walking the checkout, so adding a skill here is a
-repin rather than a config edit.
+A NixOS/home-manager flake pins this repository with nvfetcher. It walks
+`skills/` and installs whatever it finds, so adding a skill here is a repin
+and nothing else. `rules/` is not walked - each rule is named individually on
+the consuming side, because it sits next to the hook or permission it
+describes, so a new rule file needs a line over there too.
