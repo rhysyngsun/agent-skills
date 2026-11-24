@@ -37,6 +37,11 @@ The prefix is `mcp__plugin_claude-code-home-manager_lean-ctx__`. A bare
 These four are the reason to reach for lean-ctx at all. Everything below
 overlaps a built-in and is a judgement call.
 
+Two of them need a tree-sitter grammar and return nothing without one, so
+they are dead in a repository that indexes as `Kind: text` - every `.nix`
+file, for one. Check with `lean-ctx index status` before relying on
+`ctx_search(action="symbol")` or `ctx_callgraph`.
+
 ## Overlaps a built-in
 
 | You want to... | Call |
