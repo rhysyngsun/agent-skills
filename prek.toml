@@ -1,0 +1,113 @@
+# prek.toml - pre-commit hook configuration
+# Docs: https://prek.j178.dev
+#
+# Install hooks:      prek install
+# Run on all files:   prek run --all-files
+# Update pinned revs: prek update
+
+# -- Built-in: fast Rust-native checks (priority 0) ---------------------------
+# No network, no environment setup - run first to catch trivial issues cheaply.
+
+[[repos]]
+repo = "builtin"
+
+[[repos.hooks]]
+id = "trailing-whitespace"
+priority = 0
+
+[[repos.hooks]]
+id = "end-of-file-fixer"
+priority = 0
+
+[[repos.hooks]]
+id = "check-merge-conflict"
+priority = 0
+
+[[repos.hooks]]
+id = "check-case-conflict"
+priority = 0
+
+[[repos.hooks]]
+id = "check-added-large-files"
+priority = 0
+
+[[repos.hooks]]
+id = "check-toml"
+priority = 0
+
+[[repos.hooks]]
+id = "check-yaml"
+priority = 0
+
+[[repos.hooks]]
+id = "check-json"
+priority = 0
+
+[[repos.hooks]]
+id = "check-executables-have-shebangs"
+priority = 0
+
+[[repos.hooks]]
+id = "check-shebang-scripts-are-executable"
+priority = 0
+
+[[repos.hooks]]
+id = "detect-private-key"
+priority = 0
+
+# -- Shell: shellcheck (priority 10) ------------------------------------------
+
+[[repos]]
+repo = "https://github.com/shellcheck-py/shellcheck-py"
+rev = "v0.11.0.1"
+hooks = [{ id = "shellcheck", priority = 10 }]
+
+# -- GitHub Actions: actionlint (priority 10, parallel with shellcheck) -------
+
+[[repos]]
+repo = "https://github.com/rhysd/actionlint"
+rev = "v1.7.12"
+
+[[repos.hooks]]
+id = "actionlint"
+priority = 10
+files = "^\\.github/workflows/.*\\.ya?ml$"
+
+# -- Secrets: gitleaks (priority 10, parallel) --------------------------------
+# Comprehensive secret scanning; complements the builtin detect-private-key.
+
+[[repos]]
+repo = "https://github.com/gitleaks/gitleaks"
+rev = "v8.30.1"
+hooks = [{ id = "gitleaks", priority = 10 }]
+
+# -- Markdown: markdownlint-cli2 (priority 10, parallel) ----------------------
+# cli2 rather than cli because it resolves config per directory: the baseline
+# lives in .markdownlint.yaml and rules/.markdownlint.yaml extends it for the
+# always-on rule files, which are not documents and should not be linted as
+# though they were. One config for a whole repo would mean turning those rules
+# off everywhere.
+
+[[repos]]
+repo = "https://github.com/DavidAnson/markdownlint-cli2"
+rev = "v0.24.2"
+hooks = [{ id = "markdownlint-cli2", priority = 10 }]
+
+# -- Agent Skills spec conformance (priority 20) ------------------------------
+# Runs last: it shells out to uvx for the reference validator, so it is the one
+# hook that needs the network on a cold cache. pass_filenames is false because
+# the script validates skill *directories*, not the files git happens to have
+# staged - a change to skills/foo/references/bar.md still has to revalidate
+# skills/foo as a whole.
+
+[[repos]]
+repo = "local"
+
+[[repos.hooks]]
+id = "validate-skills"
+name = "validate agent skills"
+entry = "scripts/validate-skills.sh"
+language = "system"
+priority = 20
+pass_filenames = false
+files = "^skills/"

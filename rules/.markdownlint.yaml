@@ -1,0 +1,16 @@
+# Overrides for rules/*.md only. Both rules below are on everywhere else.
+#
+# A rule file is not a document. Its whole text is concatenated into an agent's
+# context at session start, so anything added to it purely to satisfy a linter
+# - a demoted heading, an inline disable comment - is a cost paid on every
+# single session.
+extends: ../.markdownlint.yaml
+
+# Peer top-level sections, no document title. Demoting them to H2 would imply a
+# containing H1 that does not exist.
+MD025: false
+
+# rules/tools.md documents appending ` # lean-ctx:bypass` to a command. The
+# leading space inside that code span is the thing being described, so MD038
+# cannot be satisfied without changing what the rule says.
+MD038: false

@@ -1,0 +1,16 @@
+# Repository-wide markdownlint baseline. markdownlint-cli2 resolves a config
+# per directory, so rules/.markdownlint.yaml extends this one rather than
+# replacing it.
+default: true
+
+# Skill bodies carry command lines, tool selectors and ToolSearch queries that
+# cannot be wrapped without breaking them.
+MD013: false
+
+# HTML comments are used as placeholders in the issue and PR templates that
+# some skills embed.
+MD033: false
+
+# A skill's title is its frontmatter `name`, so a SKILL.md body does not need
+# to open with an H1.
+MD041: false

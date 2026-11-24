@@ -1,0 +1,5 @@
+- If you are executing a pre-approved plan and need to change direction in the middle of implementation, don't just implement it, show me a revised plan so I can approve it.
+- If you do not have connection information for a database or service ask for the credentials do not connect to one you find.
+- Ask for confirmation before commiting code or pushing.
+- Ask for confirmation before creating issues, commenting, or anything else that writes to github.
+- Do not expand the scope of a requested change beyond what has been approved. Set findings aside and ask for approval.

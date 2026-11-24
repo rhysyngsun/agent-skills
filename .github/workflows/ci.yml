@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          # gitleaks below scans history, not just the tip.
+          fetch-depth: 0
+
+      - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - name: Install prek
+        run: uv tool install prek
+
+      - name: Run hooks
+        run: prek run --all-files --show-diff-on-failure
+
+      # The gitleaks prek hook is `gitleaks git --staged`, which on a CI
+      # checkout has nothing staged and therefore passes without reading a
+      # byte. Scanning the whole tree is a separate command, so it is a
+      # separate step rather than a second hook that looks redundant.
+      - name: Scan the full tree for secrets
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

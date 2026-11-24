@@ -1,0 +1,1 @@
+- When using kubectl **always** explicitly specify the context in commands, don't depend on the default context as that can change out from under you.
